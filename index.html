@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheez IPA</title>
-    <link rel="icon" type="https://www.clipartmax.com/png/full/49-498663_cheese-transparent-png-file-cheese-vector-png.png">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧀</text></svg>">
     <style>
         :root {
             --bg-color: #080600;
-            --glass-bg: rgba(25, 22, 10, 0.6);
+            --glass-bg: rgba(25, 22, 10, 0.65);
             --glass-border: rgba(255, 204, 0, 0.2);
             --accent-color: #ffcc00; /* Cheese Yellow */
             --accent-hover: #ffdb4d;
             --text-color: #f5f5f7;
             --text-muted: #a1a1aa;
-            --nav-glass: rgba(20, 18, 10, 0.7);
+            --nav-glass: rgba(20, 18, 10, 0.75);
+            --modal-bg: rgba(15, 12, 5, 0.85);
         }
 
         body {
@@ -149,6 +150,7 @@
             align-items: center;
             gap: 1.25rem;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
         }
 
         .card:hover {
@@ -206,6 +208,12 @@
             border: 1px solid rgba(255, 204, 0, 0.2);
         }
 
+        .action-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
         .download-btn {
             background: var(--accent-color);
             color: #000000;
@@ -217,15 +225,162 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(255, 204, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
+            text-align: center;
         }
 
         .download-btn:hover {
             background: var(--accent-hover);
             transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(255, 204, 0, 0.4);
+        }
+
+        .view-details-btn {
+            background: rgba(255,255,255,0.08);
+            color: var(--text-color);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .view-details-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Apple Glass Details Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: var(--modal-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-card {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .modal-header {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-icon {
+            width: 90px;
+            height: 90px;
+            background: #1c1a15;
+            border-radius: 22px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .modal-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-title-area h3 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .modal-description {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #d1d1d6;
+            margin-bottom: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .modal-actions .btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-main {
+            background: var(--accent-color);
+            color: black;
+        }
+
+        .btn-game {
+            background: #ffffff;
+            color: black;
         }
     </style>
 </head>
@@ -262,9 +417,16 @@
         <div class="grid" id="apps-grid"></div>
     </div>
 
+    <div class="modal-overlay" id="details-modal" onclick="closeModal(event)">
+        <div class="modal-card">
+            <button class="close-modal" onclick="forceCloseModal()">×</button>
+            <div id="modal-content-target"></div>
+        </div>
+    </div>
+
     <script>
         // ========================================================
-        // 🟡 DATABASE: EDIT CONTENT OR PASTE LINKS DIRECTLY HERE
+        // 🟡 DATABASE: EDIT APP INFOS, MINI-GAME LINKS & DOWNLOAD LINKS HERE
         // ========================================================
         const appsDatabase = [
             {
@@ -274,7 +436,9 @@
                 size: "99 MB",
                 badgeText: "Mod Menu",
                 iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8X5JjpaXIFfsI2KKuU_kjCFDAGJZxktgz3g&s",
-                buzzheavierLink: "YOUR_BUZZHEAVIER_LINK_HERE"
+                description: "You must escape Granny's creepy house within 5 days. Watch out, she hears absolutely everything! This customized IPA release integrates an optimized Mod Menu container.",
+                buzzheavierLink: "https://buzzheavier.com/wml3ueyh0mbd",
+                miniGameUrl: "https://grannyfree.io/play/granny/" 
             },
             {
                 name: "NotFlix",
@@ -283,7 +447,9 @@
                 size: "38.5 MB",
                 badgeText: "Free", 
                 iconUrl: "https://archive.org/download/notflix_202102/notflix.png",
-                buzzheavierLink: "LINK_HERE"
+                description: "An elegant, completely mobile streaming dashboard client offering catalog index tracking solutions over cloud entertainment feeds.",
+                buzzheavierLink: "https://buzzheavier.com/5b6ig98c071x",
+                miniGameUrl: "" // Example URL for testing the dynamic action text
             }
         ];
 
@@ -295,12 +461,9 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.setAttribute('data-type', item.type);
+                card.setAttribute('onclick', `openDetails(${index}, event)`);
 
-                const badgeHTML = item.badgeText ? `
-                    <span class="badge">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:2px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-                        ${item.badgeText}
-                    </span>` : '';
+                const badgeHTML = item.badgeText ? `<span class="badge">${item.badgeText}</span>` : '';
 
                 card.innerHTML = `
                     <div class="app-icon">
@@ -311,12 +474,62 @@
                         <p class="app-meta">${item.version} • ${item.size}</p>
                         ${badgeHTML}
                     </div>
-                    <button class="download-btn" onclick="triggerDownload(${index})">
-                        GET
-                    </button>
+                    <div class="action-container" onclick="event.stopPropagation();">
+                        <button class="download-btn" onclick="triggerDownload(${index})">GET</button>
+                        <button class="view-details-btn" onclick="openDetails(${index}, event)">Info</button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // Open details window
+        function openDetails(index, event) {
+            if (event) event.stopPropagation();
+            const item = appsDatabase[index];
+            const target = document.getElementById('modal-content-target');
+            
+            // Adjust label dynamically based on type property ('apps' vs 'games')
+            const actionLabel = item.type === "apps" ? "Visit Mini-App" : "Play Mini-Game";
+
+            // Generate link action button if miniGameUrl exists
+            const gameButtonHTML = item.miniGameUrl ? `
+                <a href="${item.miniGameUrl}" target="_blank" class="btn btn-game">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><rect x="2" y="6" width="20" height="12" rx="3"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line></svg>
+                    ${actionLabel}
+                </a>
+            ` : '';
+
+            target.innerHTML = `
+                <div class="modal-header">
+                    <div class="modal-icon">
+                        <img src="${item.iconUrl}" alt="">
+                    </div>
+                    <div class="modal-title-area">
+                        <h3>${item.name}</h3>
+                        <p style="color:var(--text-muted); margin:0; font-size:0.9rem;">${item.version} • ${item.size}</p>
+                    </div>
+                </div>
+                <div class="modal-description">
+                    ${item.description}
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-main" onclick="triggerDownload(${index})">Download IPA</button>
+                    ${gameButtonHTML}
+                </div>
+            `;
+
+            document.getElementById('details-modal').classList.add('active');
+        }
+
+        function closeModal(event) {
+            if(event.target.id === 'details-modal') {
+                forceCloseModal();
+            }
+        }
+
+        function forceCloseModal() {
+            document.getElementById('details-modal').classList.remove('active');
         }
 
         function filterCategory(category, event) {
@@ -342,7 +555,7 @@
             const targetLink = selectedItem.buzzheavierLink;
 
             if (targetLink === "YOUR_BUZZHEAVIER_LINK_HERE" || targetLink === "LINK_HERE" || targetLink === "" || !targetLink) {
-                alert(`Please open the HTML code and update the "buzzheavierLink" parameter inside the database for "${selectedItem.name}".`);
+                alert(`Please update the "buzzheavierLink" value in the script code database for "${selectedItem.name}".`);
             } else {
                 window.location.href = targetLink;
             }
