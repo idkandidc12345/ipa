@@ -48,6 +48,10 @@
             gap: 0.6rem;
         }
 
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+
         .logo {
             font-size: 1.6rem;
             font-weight: 800;
@@ -238,7 +242,7 @@
             background: rgba(255,255,255,0.15);
         }
 
-        /* Apple Glass Details Modal Styling */
+        /* Details Modal Styling */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -376,6 +380,7 @@
 
     <header>
         <div class="logo-container">
+            <span class="logo-icon">🧀</span>
             <div class="logo">Cheez IPA</div>
         </div>
     </header>
@@ -402,9 +407,6 @@
     </div>
 
     <script>
-        // ========================================================
-        // 🟡 DATABASE
-        // ========================================================
         const appsDatabase = [
             {
                 name: "Granny",
@@ -480,7 +482,6 @@
                 `;
                 grid.appendChild(card);
             });
-            // Defaults to viewing games segment initially
             filterCategory('games');
         }
 
