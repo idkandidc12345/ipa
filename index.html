@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AltSpace - IPA Store</title>
+    <title>Cheez IPA</title>
+    <link rel="icon" type="https://www.clipartmax.com/png/full/49-498663_cheese-transparent-png-file-cheese-vector-png.png">
     <style>
         :root {
-            --bg-color: #0a0505;
-            --glass-bg: rgba(25, 10, 10, 0.65);
-            --glass-border: rgba(255, 59, 48, 0.2);
-            --accent-color: #ff3b30; /* Apple Red */
-            --accent-hover: #ff453a;
+            --bg-color: #080600;
+            --glass-bg: rgba(25, 22, 10, 0.6);
+            --glass-border: rgba(255, 204, 0, 0.2);
+            --accent-color: #ffcc00; /* Cheese Yellow */
+            --accent-hover: #ffdb4d;
             --text-color: #f5f5f7;
-            --text-muted: #8e8e93;
-            --nav-glass: rgba(20, 20, 20, 0.7);
+            --text-muted: #a1a1aa;
+            --nav-glass: rgba(20, 18, 10, 0.7);
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at top, #2c0d0d 0%, var(--bg-color) 70%);
+            background: radial-gradient(circle at top, #332600 0%, var(--bg-color) 70%);
             background-attachment: fixed;
             color: var(--text-color);
             margin: 0;
@@ -27,7 +28,7 @@
         }
 
         header {
-            background: rgba(10, 5, 5, 0.4);
+            background: rgba(8, 6, 0, 0.4);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             position: sticky;
@@ -43,7 +44,11 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.6rem;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
         }
 
         .logo {
@@ -88,7 +93,6 @@
             gap: 0.5rem;
         }
 
-        /* Pointer events fix to prevent icon glitching when clicked */
         .floating-dock button svg,
         .floating-dock button span {
             pointer-events: none;
@@ -149,14 +153,14 @@
 
         .card:hover {
             transform: translateY(-4px);
-            border-color: rgba(255, 59, 48, 0.4);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 59, 48, 0.1);
+            border-color: rgba(255, 204, 0, 0.4);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 204, 0, 0.1);
         }
 
         .app-icon {
             width: 72px;
             height: 72px;
-            background: linear-gradient(145deg, #1e1e24, #121214);
+            background: linear-gradient(145deg, #221e14, #14120e);
             border-radius: 18px;
             display: flex;
             align-items: center;
@@ -193,18 +197,18 @@
             display: inline-flex;
             align-items: center;
             gap: 0.25rem;
-            background: rgba(255, 59, 48, 0.15);
-            color: #ff453a;
+            background: rgba(255, 204, 0, 0.15);
+            color: var(--accent-color);
             font-size: 0.75rem;
             font-weight: 600;
             padding: 0.2rem 0.6rem;
             border-radius: 6px;
-            border: 1px solid rgba(255, 59, 48, 0.2);
+            border: 1px solid rgba(255, 204, 0, 0.2);
         }
 
         .download-btn {
             background: var(--accent-color);
-            color: white;
+            color: #000000;
             border: none;
             padding: 0.5rem 1.2rem;
             border-radius: 20px;
@@ -212,7 +216,7 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 204, 0, 0.2);
             display: flex;
             align-items: center;
             gap: 0.25rem;
@@ -221,7 +225,7 @@
         .download-btn:hover {
             background: var(--accent-hover);
             transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(255, 59, 48, 0.4);
+            box-shadow: 0 4px 16px rgba(255, 204, 0, 0.4);
         }
     </style>
 </head>
@@ -229,8 +233,8 @@
 
     <header>
         <div class="logo-container">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-            <div class="logo">AltSpace</div>
+            <span class="logo-icon">🧀</span>
+            <div class="logo">Cheez IPA</div>
         </div>
     </header>
 
@@ -260,7 +264,7 @@
 
     <script>
         // ========================================================
-        // 🔴 DATABASE: EDIT CONTENT OR PASTE LINKS DIRECTLY HERE
+        // 🟡 DATABASE: EDIT CONTENT OR PASTE LINKS DIRECTLY HERE
         // ========================================================
         const appsDatabase = [
             {
