@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AltSpace - IPA Store</title>
+    <style>
+        :root {
+            --bg-color: #0a0505;
+            --glass-bg: rgba(25, 10, 10, 0.65);
+            --glass-border: rgba(255, 59, 48, 0.2);
+            --accent-color: #ff3b30; /* Apple Red */
+            --accent-hover: #ff453a;
+            --text-color: #f5f5f7;
+            --text-muted: #8e8e93;
+            --nav-glass: rgba(20, 20, 20, 0.7);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top, #2c0d0d 0%, var(--bg-color) 70%);
+            background-attachment: fixed;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        header {
+            background: rgba(10, 5, 5, 0.4);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            position: sticky;
+            top: 0;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 90;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 40%, var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Floating Dock/Taskbar Layout */
+        .floating-dock {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--nav-glass);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 0.75rem;
+            border-radius: 30px;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .floating-dock button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 22px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Pointer events fix to prevent icon glitching when clicked */
+        .floating-dock button svg,
+        .floating-dock button span {
+            pointer-events: none;
+        }
+
+        .floating-dock button:hover {
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .floating-dock button.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto 8rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            letter-spacing: -0.5px;
+        }
+
+        .category-title svg {
+            color: var(--accent-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(120%);
+            -webkit-backdrop-filter: blur(16px) saturate(120%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 59, 48, 0.4);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 59, 48, 0.1);
+        }
+
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(145deg, #1e1e24, #121214);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-info {
+            flex-grow: 1;
+        }
+
+        .app-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0 0 0.25rem 0;
+            letter-spacing: -0.3px;
+        }
+
+        .app-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: rgba(255, 59, 48, 0.15);
+            color: #ff453a;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+        }
+
+        .download-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(255, 59, 48, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff3b30" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <div class="logo">AltSpace</div>
+        </div>
+    </header>
+
+    <div class="floating-dock">
+        <button class="active" onclick="filterCategory('all', event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>All</span>
+        </button>
+        <button onclick="filterCategory('apps', event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            <span>Apps</span>
+        </button>
+        <button onclick="filterCategory('games', event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="3"></rect></svg>
+            <span>Games</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <h2 class="category-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            Releases
+        </h2>
+        
+        <div class="grid" id="apps-grid"></div>
+    </div>
+
+    <script>
+        // ========================================================
+        // 🔴 DATABASE: EDIT CONTENT OR PASTE LINKS DIRECTLY HERE
+        // ========================================================
+        const appsDatabase = [
+            {
+                name: "Granny",
+                type: "games",
+                version: "v1.8",
+                size: "99 MB",
+                badgeText: "Mod Menu",
+                iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8X5JjpaXIFfsI2KKuU_kjCFDAGJZxktgz3g&s",
+                buzzheavierLink: "YOUR_BUZZHEAVIER_LINK_HERE"
+            },
+            {
+                name: "NotFlix",
+                type: "apps", 
+                version: "v2.0",
+                size: "38.5 MB",
+                badgeText: "Free", 
+                iconUrl: "https://archive.org/download/notflix_202102/notflix.png",
+                buzzheavierLink: "LINK_HERE"
+            }
+        ];
+
+        function renderStore() {
+            const grid = document.getElementById('apps-grid');
+            grid.innerHTML = ""; 
+
+            appsDatabase.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-type', item.type);
+
+                const badgeHTML = item.badgeText ? `
+                    <span class="badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:2px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                        ${item.badgeText}
+                    </span>` : '';
+
+                card.innerHTML = `
+                    <div class="app-icon">
+                        <img src="${item.iconUrl}" alt="${item.name} Icon" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23333%22/><text x=%2250%%22 y=%2255%%22 font-family=%22sans-serif%22 font-size=%2230%22 fill=%22white%22 text-anchor=%22middle%22>📦</text></svg>'">
+                    </div>
+                    <div class="app-info">
+                        <p class="app-name">${item.name}</p>
+                        <p class="app-meta">${item.version} • ${item.size}</p>
+                        ${badgeHTML}
+                    </div>
+                    <button class="download-btn" onclick="triggerDownload(${index})">
+                        GET
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(category, event) {
+            const cards = document.querySelectorAll('.card');
+            const buttons = document.querySelectorAll('.floating-dock button');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if(event) {
+                event.currentTarget.classList.add('active');
+            }
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-type') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function triggerDownload(index) {
+            const selectedItem = appsDatabase[index];
+            const targetLink = selectedItem.buzzheavierLink;
+
+            if (targetLink === "YOUR_BUZZHEAVIER_LINK_HERE" || targetLink === "LINK_HERE" || targetLink === "" || !targetLink) {
+                alert(`Please open the HTML code and update the "buzzheavierLink" parameter inside the database for "${selectedItem.name}".`);
+            } else {
+                window.location.href = targetLink;
+            }
+        }
+
+        renderStore();
+    </script>
+</body>
+</html>
