@@ -48,10 +48,6 @@
             gap: 0.6rem;
         }
 
-        .logo-icon {
-            font-size: 1.8rem;
-        }
-
         .logo {
             font-size: 1.6rem;
             font-weight: 800;
@@ -85,16 +81,14 @@
             color: var(--text-muted);
             font-size: 0.9rem;
             font-weight: 500;
-            padding: 0.6rem 1.2rem;
+            padding: 0.6rem 1.4rem;
             border-radius: 22px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
         }
 
-        .floating-dock button svg,
         .floating-dock button span {
             pointer-events: none;
         }
@@ -122,14 +116,8 @@
             font-size: 1.6rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
             letter-spacing: -0.5px;
-        }
-
-        .category-title svg {
-            color: var(--accent-color);
+            text-transform: capitalize;
         }
 
         .grid {
@@ -388,32 +376,21 @@
 
     <header>
         <div class="logo-container">
-            <span class="logo-icon">🧀</span>
             <div class="logo">Cheez IPA</div>
         </div>
     </header>
 
     <div class="floating-dock">
-        <button class="active" onclick="filterCategory('all', event)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>All</span>
-        </button>
-        <button onclick="filterCategory('apps', event)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-            <span>Apps</span>
-        </button>
-        <button onclick="filterCategory('games', event)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="3"></rect></svg>
+        <button class="active" id="btn-games" onclick="filterCategory('games', event)">
             <span>Games</span>
+        </button>
+        <button id="btn-apps" onclick="filterCategory('apps', event)">
+            <span>Apps</span>
         </button>
     </div>
 
     <div class="container">
-        <h2 class="category-title">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-            Releases
-        </h2>
-        
+        <h2 class="category-title" id="section-heading">Games</h2>
         <div class="grid" id="apps-grid"></div>
     </div>
 
@@ -426,7 +403,7 @@
 
     <script>
         // ========================================================
-        // 🟡 DATABASE: EDIT APP INFOS, MINI-GAME LINKS & DOWNLOAD LINKS HERE
+        // 🟡 DATABASE
         // ========================================================
         const appsDatabase = [
             {
@@ -437,8 +414,8 @@
                 badgeText: "Mod Menu",
                 iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8X5JjpaXIFfsI2KKuU_kjCFDAGJZxktgz3g&s",
                 description: "You must escape Granny's creepy house within 5 days. Watch out, she hears absolutely everything! This customized IPA release integrates an optimized Mod Menu container.",
-                buzzheavierLink: "https://buzzheavier.com/wml3ueyh0mbd",
-                miniGameUrl: "https://grannyfree.io/play/granny/"
+                buzzheavierLink: "YOUR_BUZZHEAVIER_LINK_HERE",
+                miniGameUrl: "https://grannyfree.io/play/granny/" 
             },
             {
                 name: "Subway Surfers",
@@ -449,18 +426,7 @@
                 iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu3uuGKOAq19ulMe2fQ53rrYssyM_IebEazw&s",
                 description: "Subway Surfers Not The Best Tho, No Mods",
                 buzzheavierLink: "https://buzzheavier.com/5b6ig98c071x",
-                miniGameUrl: "https://gamecollections.me/game/3kh0-assets-main/subway-surfers/" // Example URL for testing the dynamic action text
-            },
-            {
-                name: "ProCreate Pocket",
-                type: "apps", 
-                version: "v4.0.8",
-                size: "291.3 MB",
-                badgeText: "Free", 
-                iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHwOnKHyFcnylkzAh2b5BeZH3mCKX9wU_VA&s",
-                description: "ProCreate For Iphone",
-                buzzheavierLink: "https://buzzheavier.com/5b6ig98c071x",
-                miniGameUrl: "" // Example URL for testing the dynamic action text
+                miniGameUrl: "https://gamecollections.me/game/3kh0-assets-main/subway-surfers/" 
             },
             {
                 name: "NotFlix",
@@ -470,8 +436,19 @@
                 badgeText: "Free", 
                 iconUrl: "https://archive.org/download/notflix_202102/notflix.png",
                 description: "An elegant, completely mobile streaming dashboard client offering catalog index tracking solutions over cloud entertainment feeds.",
+                buzzheavierLink: "LINK_HERE",
+                miniGameUrl: "https://archive.org/" 
+            },
+            {
+                name: "ProCreate Pocket",
+                type: "apps", 
+                version: "v4.0.8",
+                size: "291.3 MB",
+                badgeText: "Free", 
+                iconUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkHwOnKHyFcnylkzAh2b5BeZH3mCKX9wU_VA&s",
+                description: "ProCreate For iPhone tool configurations optimized for mobile canvases.",
                 buzzheavierLink: "https://buzzheavier.com/5b6ig98c071x",
-                miniGameUrl: "" // Example URL for testing the dynamic action text
+                miniGameUrl: "" 
             }
         ];
 
@@ -503,21 +480,19 @@
                 `;
                 grid.appendChild(card);
             });
+            // Defaults to viewing games segment initially
+            filterCategory('games');
         }
 
-        // Open details window
         function openDetails(index, event) {
             if (event) event.stopPropagation();
             const item = appsDatabase[index];
             const target = document.getElementById('modal-content-target');
             
-            // Adjust label dynamically based on type property ('apps' vs 'games')
             const actionLabel = item.type === "apps" ? "Visit Mini-App" : "Play Mini-Game";
 
-            // Generate link action button if miniGameUrl exists
             const gameButtonHTML = item.miniGameUrl ? `
                 <a href="${item.miniGameUrl}" target="_blank" class="btn btn-game">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><rect x="2" y="6" width="20" height="12" rx="3"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line></svg>
                     ${actionLabel}
                 </a>
             ` : '';
@@ -557,14 +532,19 @@
         function filterCategory(category, event) {
             const cards = document.querySelectorAll('.card');
             const buttons = document.querySelectorAll('.floating-dock button');
+            const heading = document.getElementById('section-heading');
             
             buttons.forEach(btn => btn.classList.remove('active'));
             if(event) {
                 event.currentTarget.classList.add('active');
+            } else {
+                document.getElementById('btn-' + category).classList.add('active');
             }
+            
+            heading.innerText = category;
 
             cards.forEach(card => {
-                if (category === 'all' || card.getAttribute('data-type') === category) {
+                if (card.getAttribute('data-type') === category) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
@@ -577,7 +557,7 @@
             const targetLink = selectedItem.buzzheavierLink;
 
             if (targetLink === "YOUR_BUZZHEAVIER_LINK_HERE" || targetLink === "LINK_HERE" || targetLink === "" || !targetLink) {
-                alert(`Please update the "buzzheavierLink" value in the script code database for "${selectedItem.name}".`);
+                alert(`Please update the "buzzheavierLink" value inside the database script for "${selectedItem.name}".`);
             } else {
                 window.location.href = targetLink;
             }
